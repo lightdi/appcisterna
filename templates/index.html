@@ -4,25 +4,67 @@
     <meta charset="UTF-8">
     <title>Monitor de Volume - Cisterna</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #eef; text-align: center; padding-top: 50px; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef;
+            text-align: center;
+            padding-top: 50px;
+        }
         h1 { color: #333; }
-        .valor { font-size: 3em; margin-top: 20px; color: #0077cc; }
+        .valor {
+            font-size: 3em;
+            margin-top: 20px;
+            color: #0077cc;
+        }
+        .percentual {
+            font-size: 2em;
+            margin-top: 10px;
+            color: #009900;
+        }
+        .barra {
+            width: 60%;
+            height: 40px;
+            margin: 20px auto;
+            background: #ccc;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .nivel {
+            height: 100%;
+            background: linear-gradient(90deg, #00bfff, #0077cc);
+            width: 0%;
+            transition: width 1s;
+        }
     </style>
 </head>
 <body>
-    <h1>Volume da Cisterna</h1>
+    <h1>Monitor de Volume da Cisterna</h1>
+    <h2>Capacidade Total: {{ volume_total }} L</h2>
     <div class="valor" id="volume">Carregando...</div>
+    <div class="percentual" id="porcentagem"></div>
+
+    <div class="barra">
+        <div class="nivel" id="nivel"></div>
+    </div>
 
     <script>
-        async function atualizarVolume() {
-            const resposta = await fetch('/volume');
+        async function atualizarDados() {
+            const resposta = await fetch('/dados');
             const dados = await resposta.json();
-            document.getElementById('volume').textContent =
-                dados.valor !== null ? dados.valor : 'Sem dados';
+            
+            if (dados.volume !== null) {
+                document.getElementById('volume').textContent = dados.volume + " L";
+                document.getElementById('porcentagem').textContent = dados.porcentagem + " %";
+                document.getElementById('nivel').style.width = dados.porcentagem + "%";
+            } else {
+                document.getElementById('volume').textContent = "Sem dados";
+                document.getElementById('porcentagem').textContent = "";
+                document.getElementById('nivel').style.width = "0%";
+            }
         }
 
-        setInterval(atualizarVolume, 2000);
-        atualizarVolume();
+        setInterval(atualizarDados, 2000);
+        atualizarDados();
     </script>
 </body>
 </html>
