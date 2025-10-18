@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Monitor de Volume - Cisterna</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eef; text-align: center; padding-top: 50px; }
+        h1 { color: #333; }
+        .valor { font-size: 3em; margin-top: 20px; color: #0077cc; }
+    </style>
+</head>
+<body>
+    <h1>Volume da Cisterna</h1>
+    <div class="valor" id="volume">Carregando...</div>
+
+    <script>
+        async function atualizarVolume() {
+            const resposta = await fetch('/volume');
+            const dados = await resposta.json();
+            document.getElementById('volume').textContent =
+                dados.valor !== null ? dados.valor : 'Sem dados';
+        }
+
+        setInterval(atualizarVolume, 2000);
+        atualizarVolume();
+    </script>
+</body>
+</html>
