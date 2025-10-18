@@ -49,7 +49,7 @@ def mqtt_thread():
     client.loop_forever()
 
 # ====== FLASK APP ======
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/appcisterna')
 
 @app.route("/")
 def index():
