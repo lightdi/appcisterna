@@ -59,6 +59,12 @@ def index():
 def get_dados():
     return jsonify(estado_cisterna)
 
+# ===== Gunicorn Configuration =====
+t = threading.Thread(target=mqtt_thread)
+t.daemon = True
+t.start()
+
+
 # ====== MAIN ======
 if __name__ == "__main__":
     t = threading.Thread(target=mqtt_thread)
